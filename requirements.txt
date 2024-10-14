@@ -1,1 +1,5 @@
 openpyxl
+xlsxwriter
+streamlit
+pandas
+numpy
