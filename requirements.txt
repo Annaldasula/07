@@ -10,3 +10,4 @@ spacy
 fuzzywuzzy
 pyLDAvis
 nltk
+scipy
