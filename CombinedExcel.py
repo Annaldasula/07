@@ -77,4 +77,4 @@ if st.session_state.uploaded_files:
 # Button to clear uploaded files
 if st.button('Clear Uploads'):
     st.session_state.uploaded_files = []
-    st.experimental_rerun()  # Reload the app to reflect the change
+    st.experimental_set_query_params() # Reload the app to reflect the change
