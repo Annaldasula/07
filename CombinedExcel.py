@@ -12,14 +12,22 @@ def extract_entity_name(file_path):
 # Web app title
 st.title('Excel File Merger & Entity Extractor')
 
+# Initialize session state for the file uploader
+if 'uploaded_files' not in st.session_state:
+    st.session_state.uploaded_files = []
+
 # File uploader
 uploaded_files = st.file_uploader("Upload your Excel files", accept_multiple_files=True, type=['xlsx'])
 
 if uploaded_files:
+    # Store uploaded files in session state
+    st.session_state.uploaded_files = uploaded_files
+
+if st.session_state.uploaded_files:
     final_df = pd.DataFrame()
     
     # Loop through each uploaded file
-    for uploaded_file in uploaded_files:
+    for uploaded_file in st.session_state.uploaded_files:
         df = pd.read_excel(uploaded_file)
         
         # Extract the entity name and add it as a new column
@@ -39,7 +47,6 @@ if uploaded_files:
         ['Entity', 'Reach', 'Sentiment', 'Keywords', 'State', 'City', 'Engagement'] +  # Adding new columns
         existing_columns[influencer_index + 1:country_index + 1]  # All columns between 'Influencer' and 'Country'
     )
-    
     
     # Fill missing values in 'Influencer' column with 'Bureau News'
     final_df['Influencer'] = final_df['Influencer'].fillna('Bureau News')
@@ -66,3 +73,8 @@ if uploaded_files:
         file_name='merged_excel_with_entity.xlsx',
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
+
+# Button to clear uploaded files
+if st.button('Clear Uploads'):
+    st.session_state.uploaded_files = []
+    st.experimental_rerun()  # Reload the app to reflect the change
