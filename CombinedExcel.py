@@ -12,6 +12,11 @@ def extract_entity_name(file_path):
 # Web app title
 st.title('Excel File Merger & Entity Extractor')
 
+# Function to reset the app state
+def reset_app():
+    st.session_state.uploaded_files = []
+    st.experimental_set_query_params()  # This resets the app by updating query params
+
 # Initialize session state for the file uploader
 if 'uploaded_files' not in st.session_state:
     st.session_state.uploaded_files = []
@@ -19,8 +24,9 @@ if 'uploaded_files' not in st.session_state:
 # File uploader
 uploaded_files = st.file_uploader("Upload your Excel files", accept_multiple_files=True, type=['xlsx'])
 
+# If new files are uploaded, reset the app to start fresh
 if uploaded_files:
-    # Store uploaded files in session state
+    reset_app()  # Clear previous files when new ones are uploaded
     st.session_state.uploaded_files = uploaded_files
 
 if st.session_state.uploaded_files:
@@ -74,7 +80,6 @@ if st.session_state.uploaded_files:
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
 
-# Button to clear uploaded files
+# Button to clear uploaded files and restart the app
 if st.button('Clear Uploads'):
-    st.session_state.uploaded_files = []
-    st.experimental_set_query_params() # Reload the app to reflect the change
+    reset_app()  # Call the reset function to clear and refresh the app
